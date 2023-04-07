@@ -1,0 +1,44 @@
+# Saveeye Homeassistant
+
+Saveye is a device that uses impulses of light to measure the amount of electricity used in your energy meter. It is available from https://saveeye.dk. 
+
+It has support for MQTT but the documentation from https://saveeye.dk/mqtt is quite sparse thus I created this repo to help others get started.
+
+## Setup
+
+Follow the guide at https://saveeye.dk/mqtt to get your Saveeye device setup with MQTT.
+
+## Homeassistant MQTT Sensors
+
+The basic config to get sensors in Homeassistant to capture current Watt and total Wh is as follows:
+
+```yaml
+mqtt:
+  sensor:
+    - name: saveeye_currentConsumptionWatt
+      state_topic: "saveeye/telemetry"
+      value_template: "{{value_json.currentConsumptionWatt}}"
+      device_class: power
+      unit_of_measurement: W
+    - name: saveeye_totalConsumptionWh
+      state_topic: "saveeye/telemetry"
+      value_template: "{{value_json.totalConsumptionWh}}"
+      device_class: energy
+      unit_of_measurement: "Wh"
+```
+
+### Additional Sensors
+
+The following additional sensors are available from the Saveeye device. I'm not including them by default as haven't fonud something to use them for yet:
+
+```yaml
+    - name: saveeye_pulses
+      state_topic: "saveeye/telemetry"
+      value_template: "{{value_json.pulses}}"
+    - name: saveeye_latestInterval
+      state_topic: "saveeye/telemetry"
+      value_template: "{{value_json.latestInterva}}"
+    - name: saveeye_timeSinceLatestPulse
+      state_topic: "saveeye/telemetry"
+      value_template: "{{value_json.timeSinceLatestPulse}}"
+```
