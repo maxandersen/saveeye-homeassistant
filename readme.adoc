@@ -2,7 +2,9 @@
 
 Saveye is a device that uses impulses of light to measure the amount of electricity used in your energy meter. It is available from https://saveeye.dk. 
 
-It has support for MQTT but the documentation from https://saveeye.dk/mqtt is quite sparse thus I created this repo to help others get started.
+It has support for MQTT but the documentation from https://saveeye.dk/mqtt is quite sparse thus I created this repo to help others get started. 
+
+It is still very much a work in progress - PR's and issues are welcome.
 
 ## Setup
 
