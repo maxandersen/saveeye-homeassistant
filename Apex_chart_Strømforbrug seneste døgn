@@ -1,0 +1,48 @@
+###########################
+#Ny graf herunder "Strømforbrug seneste døgn":
+###########################
+type: custom:apexcharts-card
+apex_config:
+  chart:
+    height: 400
+    graph_span: 8h
+header:
+  show: true
+  title: Strømforbrug seneste døgn
+  show_states: true
+  colorize_states: true
+update_interval: 5m
+series:
+  - entity: sensor.saveeye_current_consumption_watt
+    name: Nuværende forbrug i watt
+    stroke_width: 1
+  - entity: sensor.saveeye_current_consumption_watt
+    name: Gennemsnit pr. time
+    stroke_width: 2
+    group_by:
+      duration: 1hour
+      func: avg
+###########################
+#Ny graf herunder "Strømforbrug summeret/time":
+###########################
+type: custom:apexcharts-card
+apex_config:
+  chart:
+    height: 400
+graph_span: 24h
+header:
+  show: true
+  title: Strømforbrug summeret/time
+  show_states: true
+  colorize_states: true
+update_interval: 1h
+series:
+  - entity: sensor.saveeye_total_hourly_consumption_wh
+    name: Seneste time
+    type: column
+    unit: kW/Time
+    float_precision: 2
+    group_by:
+      duration: 1hour
+      func: delta
+    transform: return x / 1000;
