@@ -18,15 +18,19 @@ The basic config to get sensors in Homeassistant to capture current Watt and tot
 mqtt:
   sensor:
     - name: saveeye_currentConsumptionWatt
+      unique_id: saveeye_currentConsumptionWatt
       state_topic: "saveeye/telemetry"
       value_template: "{{value_json.currentConsumptionWatt}}"
       device_class: power
       unit_of_measurement: W
+      state_class: measurement
     - name: saveeye_totalConsumptionWh
+      unique_id: saveeye_totalConsumptionWh
       state_topic: "saveeye/telemetry"
       value_template: "{{value_json.totalConsumptionWh}}"
       device_class: energy
       unit_of_measurement: "Wh"
+      state_class: total_increasing
 ```
 
 ### Additional Sensors
