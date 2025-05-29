@@ -2,35 +2,58 @@
 
 Saveye is a device that uses impulses of light to measure the amount of electricity used in your energy meter. It is available from https://saveeye.dk. 
 
-It has support for MQTT but the documentation from https://saveeye.dk/mqtt is quite sparse thus I created this repo to help others get started. 
+It has support for MQTT but the documentation from https://github.com/saveeye/SaveEye-HA-Guide (previously https://saveeye.dk/mqtt) does not match what data I get I created this repo to help others get started. 
 
 It is still very much a work in progress - PR's and issues are welcome.
 
 ## Setup
 
-Follow the guide at https://saveeye.dk/mqtt to get your Saveeye device setup with MQTT.
+Follow the guide at https://github.com/saveeye/SaveEye-HA-Guide to get your Saveeye device setup with MQTT. If the data you receive does not match what that guide tells you try what I have below.
 
 ## Homeassistant MQTT Sensors
 
-The basic config to get sensors in Homeassistant to capture current Watt and total Wh is as follows:
+The basic config to get a device with sensors in Homeassistant to capture current Watt and total Wh is as follows:
 
 ```yaml
 mqtt:
   sensor:
-    - name: saveeye_currentConsumptionWatt
-      unique_id: saveeye_currentConsumptionWatt
+    - state_topic: "saveeye/telemetry"
+      name: Device Serial Number
+      unique_id: "saveeye_DeviceSerialNumber"
+      device_class: "enum"
+      icon: mdi:identifier
+      value_template: '{{ value_json["saveeyeDeviceSerialNumber"] }}'
+      device:
+        identifiers: "SaveEye-General"
+        manufacturer: "SaveEye.eu"
+        name: "SaveEye Device"
+        model: "V1"
+        
+    - unique_id: saveeye_currentConsumptionWatt
+      name: Current Consumption Watt  
       state_topic: "saveeye/telemetry"
       value_template: "{{value_json.currentConsumptionWatt}}"
       device_class: power
       unit_of_measurement: W
       state_class: measurement
-    - name: saveeye_totalConsumptionWh
-      unique_id: saveeye_totalConsumptionWh
+      device:
+        identifiers: "SaveEye-General"
+        manufacturer: "SaveEye.eu"
+        name: "SaveEye Device"
+        model: "V1"
+
+    - unique_id: saveeye_totalConsumptionWh
+      name: Total Consumption Wh
       state_topic: "saveeye/telemetry"
       value_template: "{{value_json.totalConsumptionWh}}"
       device_class: energy
       unit_of_measurement: "Wh"
       state_class: total_increasing
+      device:
+        identifiers: "SaveEye-General"
+        manufacturer: "SaveEye.eu"
+        name: "SaveEye Device"
+        model: "V1"
 ```
 
 ### Additional Sensors
@@ -38,13 +61,31 @@ mqtt:
 The following additional sensors are available from the Saveeye device. I'm not including them by default as haven't fonud something to use them for yet:
 
 ```yaml
-    - name: saveeye_pulses
+    - unique_id: saveeye_pulses
+      name: Pulses
       state_topic: "saveeye/telemetry"
       value_template: "{{value_json.pulses}}"
-    - name: saveeye_latestInterval
+      device:
+        identifiers: "SaveEye-General"
+        manufacturer: "SaveEye.eu"
+        name: "SaveEye Device"
+        model: "V1"
+    - unique_id: saveeye_latestinterval
+      name: Latest Interval
       state_topic: "saveeye/telemetry"
-      value_template: "{{value_json.latestInterva}}"
-    - name: saveeye_timeSinceLatestPulse
+      value_template: "{{value_json.latestInterval}}"
+      device:
+        identifiers: "SaveEye-General"
+        manufacturer: "SaveEye.eu"
+        name: "SaveEye Device"
+        model: "V1"
+    - unique_id: saveeye_timesincelatestpulse
+      name: Time since latest pulse
       state_topic: "saveeye/telemetry"
       value_template: "{{value_json.timeSinceLatestPulse}}"
+      device:
+        identifiers: "SaveEye-General"
+        manufacturer: "SaveEye.eu"
+        name: "SaveEye Device"
+        model: "V1"
 ```
